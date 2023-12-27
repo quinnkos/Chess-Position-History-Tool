@@ -1,3 +1,4 @@
+from __future__ import division
 import pandas as pd
 
 #imports lichess dataframe; selects relevant columns
@@ -51,7 +52,8 @@ def mainLoop(df, currentMoves):
             except: blackWins = 0
             try: draws = sameNextMove.winner.value_counts()['draw']
             except: draws = 0
-            output.append("    %s: %d (1-0: %d | 0-1: %d | ½/½: %d)" % (move,nextMoves.count(move),whiteWins,blackWins,draws))
+            output.append("    %s: %d (1-0: %d (%.0f%%) | 0-1: %d (%.0f%%) | ½/½: %d (%.0f%%))" %
+                (move, nextMoves.count(move), whiteWins, whiteWins/nextMoves.count(move)*100, blackWins, blackWins/nextMoves.count(move)*100, draws, draws/nextMoves.count(move)*100))
         output.sort(key=lambda x: int(x.strip().split(' ')[1]), reverse=True)
         for line in output:
             print(line)
@@ -63,7 +65,8 @@ def mainLoop(df, currentMoves):
     except: blackWins = 0
     try: draws = alikeGames.winner.value_counts()['draw']
     except: draws = 0
-    print("Games that reached same position: %d (1-0: %d | 0-1: %d | ½/½: %d)" % (len(alikeGames),whiteWins,blackWins,draws))
+    print("Games that reached same position: %d (1-0: %d (%.0f%%) | 0-1: %d (%.0f%%) | ½/½: %d (%.0f%%))" %
+        (len(alikeGames), whiteWins, whiteWins/len(alikeGames)*100, blackWins, blackWins/len(alikeGames)*100, draws, draws/len(alikeGames)*100))
 
     #calls function to print next moves and related stats;
     print("Games that continued with:")
